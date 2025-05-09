@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: spring-boot-kafka
+
+  kafka:
+    properties:
+      auto:
+        register:
+          schemas: true
+    bootstrap-servers: http://localhost:9092
+    producer:
+      acks: all
+      retries: 50
+      properties:
+        retry:
+          backoff:
+            ms: 250
+        schema:
+          registry:
+            url: http://localhost:8081
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+server:
+  port: 8086
+
+kafka:
+  order-topic: order_topic
+
+logging:
+  level:
+    root: info
+    com.sts: debug
+    org.springframework.web: debug
+    org.springframework.kafka: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} [%file:%line] - %msg%n"

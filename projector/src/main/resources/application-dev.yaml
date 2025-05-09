@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: spring-boot-kafka
+
+  kafka:
+    properties:
+      auto:
+        register:
+          schemas: true
+    bootstrap-servers: http://localhost:9092
+    consumer:
+      properties:
+        specific:
+          avro:
+            reader: true
+        spring:
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+        schema:
+          registry:
+            url: http://localhost:8081
+      group-id: spring-boot-kafka-5
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      auto-offset-reset: earliest
+
+kafka:
+  order-topic: order_topic
+
+logging:
+  level:
+    root: info
+    com.sts: debug
+    org.springframework.web: debug
+    org.springframework.kafka: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} [%file:%line] - %msg%n"
